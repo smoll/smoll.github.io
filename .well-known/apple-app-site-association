@@ -1,0 +1,15 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["4A8YXAG2CG.io.github.smoll.scootscoot"],
+        "components": [
+          {
+            "/": "/c/*",
+            "comment": "scoot-scoot card deep links"
+          }
+        ]
+      }
+    ]
+  }
+}

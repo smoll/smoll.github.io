@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<!--
+  GitHub Pages serves this for any unknown path, which includes the
+  /c/<scryfall-id> sticker links when the Scoot Scoot app is NOT installed
+  (installed apps intercept those URLs as universal links and never load
+  this page). It offers the device-served PWA as the fallback.
+-->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scoot Scoot</title>
+  <style>
+    body { font-family: -apple-system, system-ui, sans-serif; background: #f4f4f2; color: #111; margin: 0; }
+    main { max-width: 480px; margin: 0 auto; padding: 32px 20px; }
+    h1 { font-size: 24px; }
+    a.button { display: block; text-align: center; background: #111; color: #fff; text-decoration: none;
+               border-radius: 12px; padding: 16px; font-weight: 700; margin-top: 12px; }
+    a.secondary { background: #fff; color: #111; border: 2px solid #111; }
+    p.small { color: #666; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Scoot Scoot 🛴</h1>
+    <p id="msg">Open this card on your X3:</p>
+    <a class="button" id="mdns" href="#">Open via home Wi-Fi (crosspoint.local)</a>
+    <a class="button secondary" id="hotspot" href="#">Open via ScootScoot hotspot (192.168.4.1)</a>
+    <p class="small">
+      Tip: install the Scoot Scoot app (TestFlight) and these card links will open it directly,
+      joining the X3's hotspot automatically.
+    </p>
+  </main>
+  <script>
+    // Preserve the /c/<id> path when handing off to the device-served PWA.
+    var path = location.pathname.startsWith('/c/') ? location.pathname : '/';
+    document.getElementById('mdns').href = 'http://crosspoint.local' + path;
+    document.getElementById('hotspot').href = 'http://192.168.4.1' + path;
+    if (path === '/') document.getElementById('msg').textContent = 'Open the app on your X3:';
+  </script>
+</body>
+</html>
