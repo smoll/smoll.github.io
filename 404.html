@@ -45,7 +45,16 @@
   </main>
   <script>
     var path = location.pathname;
-    if (path.startsWith('/x3')) {
+    if (path.startsWith('/t/') || path === '/x3push') {
+      // Token-maker stickers and the X3 trigger sticker are app features.
+      document.getElementById('card-view').style.display = 'none';
+      document.getElementById('setup-view').style.display = 'block';
+      document.getElementById('setup-msg').textContent =
+        path === '/x3push'
+          ? 'This is the push trigger on the X3 — it works with the Scoot Scoot app installed.'
+          : 'Token stickers need the Scoot Scoot app to resolve which token this card creates.';
+      document.getElementById('setup-open').style.display = 'none';
+    } else if (path.startsWith('/x3')) {
       // Device setup QR scanned without the app installed. Connection info
       // is in the fragment (never sent to this server).
       document.getElementById('card-view').style.display = 'none';

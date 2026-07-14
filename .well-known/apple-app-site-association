@@ -11,6 +11,10 @@
           {
             "/": "/x3*",
             "comment": "scoot-scoot device setup QR (connection info rides in the fragment)"
+          },
+          {
+            "/": "/t/*",
+            "comment": "scoot-scoot token-maker stickers (app resolves which tokens the card creates)"
           }
         ]
       }
