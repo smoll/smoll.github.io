@@ -7,6 +7,10 @@
           {
             "/": "/c/*",
             "comment": "scoot-scoot card deep links"
+          },
+          {
+            "/": "/x3*",
+            "comment": "scoot-scoot device setup QR (connection info rides in the fragment)"
           }
         ]
       }

@@ -23,20 +23,58 @@
 <body>
   <main>
     <h1>Scoot Scoot 🛴</h1>
-    <p id="msg">Open this card on your X3:</p>
-    <a class="button" id="mdns" href="#">Open via home Wi-Fi (crosspoint.local)</a>
-    <a class="button secondary" id="hotspot" href="#">Open via ScootScoot hotspot (192.168.4.1)</a>
+    <div id="card-view">
+      <p id="msg">Open this card on your X3:</p>
+      <a class="button" id="mdns" href="#">Open via home Wi-Fi (crosspoint.local)</a>
+      <a class="button secondary" id="hotspot" href="#">Open via ScootScoot hotspot (192.168.4.1)</a>
+    </div>
+    <div id="setup-view" style="display:none">
+      <p id="setup-msg"></p>
+      <p id="setup-creds" style="display:none">
+        Wi-Fi: <strong id="setup-ssid"></strong><br />
+        Password: <code id="setup-pass"></code>
+        <button id="copy-pass" style="margin-left:8px">Copy</button><br />
+        <span class="small">Join it in Settings → Wi-Fi, then:</span>
+      </p>
+      <a class="button" id="setup-open" href="#">Open the X3 app page</a>
+    </div>
     <p class="small">
-      Tip: install the Scoot Scoot app (TestFlight) and these card links will open it directly,
-      joining the X3's hotspot automatically.
+      Tip: install the Scoot Scoot app (TestFlight) and scanning the X3's QR or tapping a card
+      sticker opens it directly — it joins the X3's hotspot automatically.
     </p>
   </main>
   <script>
-    // Preserve the /c/<id> path when handing off to the device-served PWA.
-    var path = location.pathname.startsWith('/c/') ? location.pathname : '/';
-    document.getElementById('mdns').href = 'http://crosspoint.local' + path;
-    document.getElementById('hotspot').href = 'http://192.168.4.1' + path;
-    if (path === '/') document.getElementById('msg').textContent = 'Open the app on your X3:';
+    var path = location.pathname;
+    if (path.startsWith('/x3')) {
+      // Device setup QR scanned without the app installed. Connection info
+      // is in the fragment (never sent to this server).
+      document.getElementById('card-view').style.display = 'none';
+      document.getElementById('setup-view').style.display = 'block';
+      var params = new URLSearchParams(location.hash.slice(1));
+      var mode = params.get('m');
+      var ssid = params.get('s') || 'ScootScoot';
+      var pass = params.get('p') || '';
+      var host = params.get('h') || (mode === 'ap' ? '192.168.4.1' : 'crosspoint.local');
+      if (mode === 'ap' && pass) {
+        document.getElementById('setup-msg').textContent = 'Your X3 is hosting its own Wi-Fi network:';
+        document.getElementById('setup-creds').style.display = 'block';
+        document.getElementById('setup-ssid').textContent = ssid;
+        document.getElementById('setup-pass').textContent = pass;
+        document.getElementById('copy-pass').onclick = function () {
+          navigator.clipboard && navigator.clipboard.writeText(pass);
+        };
+      } else {
+        document.getElementById('setup-msg').textContent =
+          'Your X3 is on “' + ssid + '” — if this phone is on the same network:';
+      }
+      document.getElementById('setup-open').href = 'http://' + host + '/';
+    } else {
+      // Card deep link: preserve the /c/<id> path when handing off to the PWA.
+      var cardPath = path.startsWith('/c/') ? path : '/';
+      document.getElementById('mdns').href = 'http://crosspoint.local' + cardPath;
+      document.getElementById('hotspot').href = 'http://192.168.4.1' + cardPath;
+      if (cardPath === '/') document.getElementById('msg').textContent = 'Open the app on your X3:';
+    }
   </script>
 </body>
 </html>
